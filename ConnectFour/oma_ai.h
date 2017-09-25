@@ -203,9 +203,12 @@ public:
 		double value = 0.0;
 		int redOdd = 0;
 		int blueOdd = 0;
-		int blueEven = 0;
+		int redEven = 0;
+		int blueEven = 0;		
 		int mixOdd = 0;
+		int mixEven = 0;
 		int testcount = 0;
+
 		for (int i = 0; i < 7; i++) {
 			for (int j = 0; j < 6; j++) {
 				if (_board[i][j] != EMPTY)
@@ -218,102 +221,198 @@ public:
 
 
 		
-		for (int i = 0; i < 7; i++) {
-			for (int j = 0; j < 6; j++) {
+		for (int i = 0; i < COLUMNS; i++) {
+			for (int j = 0; j < ROWS; j++) {
 
-					//odds
+					//horizontal
 					if (_board[i][j] == RED && _board[i + 1][j] == RED && _board[i + 2][j] == RED && _board[i + 3][j] == EMPTY) {
 						if (j % 2 != 0)
-							redOdd++;							
+							redOdd++;	
+						if (j % 2 == 0)
+							redEven++;
 					}
-					if (_board[i][j] == RED && _board[i][j+1] == RED && _board[i][j+2] == RED && _board[i][j+3] == EMPTY) {
+					//horizontal
+					if (_board[i][j] == RED && _board[i + 1][j] == RED && _board[i + 2][j] == RED && _board[i - 1][j] == EMPTY) {
+						if (j % 2 != 0)
+							redOdd++;
+						if (j % 2 == 0)
+							redEven++;
+					}
+					//vertical
+					if (_board[i][j] == RED && _board[i][j+1] == RED && _board[i][j+2] == RED && _board[i][j + 3] == EMPTY) {
 						if ((j+3) % 2 != 0)
 							redOdd++;
+						if ((j + 3) % 2 == 0)
+							redEven++;
 					}
-
-					if (_board[i][j] == RED && _board[i+1][j + 1] == RED && _board[i+2][j + 2] == RED && _board[i+3][j + 3] == EMPTY) {
+					//diagonal upwards
+					if (_board[i][j] == RED && _board[i+1][j + 1] == RED && _board[i+2][j + 2] == RED && _board[i + 3][j + 3] == EMPTY) {
 						if ((j + 3) % 2 != 0)
 							redOdd++;
+						if ((j + 3) % 2 == 0)
+							redEven++;
+					}
+					//diagonal upwards
+					if (_board[i][j] == RED && _board[i + 1][j + 1] == RED && _board[i + 2][j + 2] == RED && _board[i - 1][j - 1] == EMPTY) {
+						if ((j - 1) % 2 != 0)
+							redOdd++;
+						if ((j - 1) % 2 == 0)
+							redEven++;
+					}
+					//diagonal downwards
+					if (_board[i][j] == RED && _board[i + 1][j - 1] == RED && _board[i + 2][j - 2] == RED && _board[i + 3][j - 3] == EMPTY) {
+						if ((j - 3) % 2 != 0)
+							redOdd++;
+						if ((j - 3) % 2 == 0)
+							redEven++;
+					}
+					//diagonal downwards
+					if (_board[i][j] == RED && _board[i + 1][j - 1] == RED && _board[i + 2][j - 2] == RED && _board[i - 1][j + 1] == EMPTY) {
+						if ((j + 1) % 2 != 0)
+							redOdd++;
+						if ((j + 1) % 2 == 0)
+							redEven++;
 					}
 
-
+					//horizontal
 					if (_board[i][j] == BLUE && _board[i + 1][j] == BLUE && _board[i + 2][j] == BLUE && _board[i + 3][j] == EMPTY) {
 						if (j % 2 != 0)
 							blueOdd++;
-					}
-					if (_board[i][j] == BLUE && _board[i][j + 1] == BLUE && _board[i][j + 2] == BLUE && _board[i][j + 3] == EMPTY) {
-						if ((j + 3) % 2 != 0)
-							blueOdd++;
-					}
-					if (_board[i][j] == BLUE && _board[i + 1][j + 1] == BLUE && _board[i + 2][j + 2] == BLUE && _board[i + 3][j + 3] == EMPTY) {
-						if ((j + 3) % 2 != 0)
-							blueOdd++;
-					}
-
-
-
-
-					//mixodds
-					if (_board[i][j] == RED && _board[i + 1][j] == RED && _board[i + 2][j] == RED && _board[i + 3][j] == EMPTY) {
-						if (_board[i][j] == BLUE && _board[i + 1][j] == BLUE && _board[i + 2][j] == BLUE && _board[i + 3][j] == EMPTY)
-							if(j % 2 != 0)
-								mixOdd++;			
-
-					}
-					if (_board[i][j] == RED && _board[i][j + 1] == RED && _board[i][j + 2] == RED && _board[i][j + 3] == EMPTY) {
-						if (_board[i][j] == BLUE && _board[i][j + 1] == BLUE && _board[i][j + 2] == BLUE && _board[i][j + 3] == EMPTY) 
-							if ((j+3) % 2 != 0)
-								mixOdd++;
-					}
-					if (_board[i][j] == RED && _board[i + 1][j + 1] == RED && _board[i + 2][j + 2] == RED && _board[i + 3][j + 3] == EMPTY) {
-						if (_board[i][j] == BLUE && _board[i + 1][j + 1] == BLUE && _board[i + 2][j + 2] == BLUE && _board[i + 3][j + 3] == EMPTY)
-							if ((j+3) % 2 != 0)
-								mixOdd++;
-					}
-					
-				
-				//even
-			
-					if (_board[i][j] == BLUE && _board[i + 1][j] == BLUE && _board[i + 2][j] == BLUE && _board[i + 3][j] == EMPTY) {
 						if (j % 2 == 0)
 							blueEven++;
 					}
+					//horizontal
+					if (_board[i][j] == BLUE && _board[i + 1][j] == BLUE && _board[i + 2][j] == BLUE && _board[i - 1][j] == EMPTY) {
+						if (j % 2 != 0)
+							blueOdd++;
+						if (j % 2 == 0)
+							blueEven++;
+					}
+					//vertical
 					if (_board[i][j] == BLUE && _board[i][j + 1] == BLUE && _board[i][j + 2] == BLUE && _board[i][j + 3] == EMPTY) {
+						if ((j + 3) % 2 != 0)
+							blueOdd++;
 						if ((j+3) % 2 == 0)
 							blueEven++;
 					}
+					//diagonal upwards
 					if (_board[i][j] == BLUE && _board[i + 1][j + 1] == BLUE && _board[i + 2][j + 2] == BLUE && _board[i + 3][j + 3] == EMPTY) {
+						if ((j + 3) % 2 != 0)
+							blueOdd++;
 						if ((j + 3) % 2 == 0)
+							blueEven++;
+					}
+					//diagonal upwards
+					if (_board[i][j] == BLUE && _board[i + 1][j + 1] == BLUE && _board[i + 2][j + 2] == BLUE && _board[i - 1][j - 1] == EMPTY) {
+						if ((j - 1) % 2 != 0)
+							blueOdd++;
+						if ((j - 1) % 2 == 0)
+							blueEven++;
+					}
+					//diagonal downwards
+					if (_board[i][j] == BLUE && _board[i + 1][j - 1] == BLUE && _board[i + 2][j - 2] == BLUE && _board[i + 3][j - 3] == EMPTY) {
+						if ((j - 3) % 2 != 0)
+							blueOdd++;
+						if ((j - 3) % 2 == 0)
+							blueEven++;
+					}
+					//diagonal downwards
+					if (_board[i][j] == BLUE && _board[i + 1][j - 1] == BLUE && _board[i + 2][j - 2] == BLUE && _board[i - 1][j + 1] == EMPTY) {
+						if ((j + 1) % 2 != 0)
+							blueOdd++;
+						if ((j + 1) % 2 == 0)
 							blueEven++;
 					}
 
 
 
-				
+					//mix horizontal
+					if (_board[i][j] == RED && _board[i + 1][j] == RED && _board[i + 2][j] == RED && _board[i + 3][j] == EMPTY) {
+						if (_board[i][j] == BLUE && _board[i + 1][j] == BLUE && _board[i + 2][j] == BLUE && _board[i + 3][j] == EMPTY) {
+							if (j % 2 != 0)
+								mixOdd++;
+							if (j % 2 == 0)
+								mixEven++;
+						}
+							
 
+					}
+					//mix vertical
+					if (_board[i][j] == RED && _board[i][j + 1] == RED && _board[i][j + 2] == RED && _board[i][j + 3] == EMPTY) {
+						if (_board[i][j] == BLUE && _board[i][j + 1] == BLUE && _board[i][j + 2] == BLUE && _board[i][j + 3] == EMPTY) {
+							if ((j + 3) % 2 != 0)
+								mixOdd++;
+							if ((j + 3) % 2 == 0)
+								mixEven++;
+						}
+							
+					}
+					// mix diagonal upwards
+					if (_board[i][j] == RED && _board[i + 1][j + 1] == RED && _board[i + 2][j + 2] == RED && _board[i + 3][j + 3] == EMPTY) {
+						if (_board[i][j] == BLUE && _board[i + 1][j + 1] == BLUE && _board[i + 2][j + 2] == BLUE && _board[i + 3][j + 3] == EMPTY) {
+							if ((j + 3) % 2 != 0)
+								mixOdd++;
+							if ((j + 3) % 2 == 0)
+								mixEven++;
+						}
+							
+					}
+					//mix diagonal downwards
+					if (_board[i][j] == RED && _board[i + 1][j - 1] == RED && _board[i + 2][j - 2] == RED && _board[i + 3][j - 3] == EMPTY) {
+						if (_board[i][j] == BLUE && _board[i + 1][j - 1] == BLUE && _board[i + 2][j - 2] == BLUE && _board[i + 3][j - 3] == EMPTY) {
+							if ((j + 3) % 2 != 0)
+								mixOdd++;
+							if ((j + 3) % 2 == 0)
+								mixEven++;
+						}
+
+					}
+
+					//center value
+					if (i == 3) 
+					{
+						if (_board[i][j] == RED)
+							value += 1;
+						if (_board[i][j] == BLUE)
+							value -= 1;
+					}
 
 	
-
-
 
 			}
 		}
 
 		int odds = redOdd - blueOdd;
-		if (redOdd > 0 && blueEven == 0 && blueOdd == 0) {
-			value = 100;
+		int evens = redEven - blueEven;
+
+	/*	if (evens > 0) 
+			value += 100;
+
+		if (evens == 0) {
+			if (mixEven > 0)
+				value += 100;
+			else if (mixOdd > 0) {
+				value -= 100;
+			}
+			if (mixEven == 0 && mixOdd == 0) {
+				if (blueOdd > 0)
+					value -= 100;
+			}
 		}
-		if (odds > 0 && blueEven == 0)
-			value = 100;
-			
-		else if (blueEven > 0)
-			value = -100;
+		if (evens < 0)
+			value -= 100;*/
 
-			
-			
+		if (redEven > blueEven)
+			value += 1000;
+		if (redOdd > blueOdd)
+			value += 100;
+		if (blueOdd > redOdd)
+			value -= 1000;
+		if (blueEven > redEven)
+			value -= 100;
+
 				
-
-
+						
 
 		return value;
 	}
@@ -322,28 +421,12 @@ public:
 
 	double evaluate()
 	{
-			double value = 0.0;
-			/*if (_to_move == BLUE) {
-				value -= check_horizontals(BLUE);
-				value -= check_verticals(BLUE);
-				value -= check_diagonals(BLUE);
-
-
-			}
-			else {
-				value += check_horizontals(RED);
-				value += check_verticals(RED);
-				value += check_diagonals(RED);
-
-			}*/
-		
-
-			value = check_threats();
-	
-	
+		double value = 0.0;
+		value = check_threats();
 
 		return value;
 	}
+
 
 	typedef struct { double _minmax; Move _move; } MinMaxVal;
 
