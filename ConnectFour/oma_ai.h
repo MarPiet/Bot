@@ -30,6 +30,7 @@ public:
 	// Kirjoita kaikkien funktioiden toteutukset tahan samaan tiedostoon.
 	// -----------------------------------------------------------------------
 
+	int depth = 7;
 	Move select_best_move()
 	{
 		//Move movelist[COLUMNS];
@@ -39,7 +40,7 @@ public:
 		//return movelist[rand() % nof_moves];
 
 		// TAI minimaxilla:
-		MinMaxVal retval = minimax(this, 5);
+		MinMaxVal retval = minimax(this, depth);
 		return retval._move;
 	}
 
@@ -72,7 +73,7 @@ public:
 				if (_board[i][j] == BLUE && _board[i + 3][j] != RED && _board[i + 2][j] != RED && _board[i + 1][j] != RED)
 				{
 					if (_board[i + 3][j] == BLUE || _board[i + 2][j] == BLUE || _board[i + 1][j] == BLUE) {
-						value += 0.25;
+						value -= 0.25;
 						if (_board[i + 1][j] == BLUE && _board[i + 2][j] == BLUE)
 							value -= 0.5;
 						if (_board[i + 2][j] == BLUE && _board[i + 3][j] == BLUE)
@@ -101,46 +102,44 @@ public:
 				//yksi alempana = sama
 				if (_board[i][j] == RED && _board[i][j - 1] == RED)
 				{
-					if (_board[i][j - 2] != RED && j > 4)
-						continue;
+					if (_board[i][j - 2] != RED && j >= 3) {
+						
+					}
+								
 					else
 						value += 0.5;
 
 					//kaksi alempana sama
-					if (_board[i][j - 2] == RED) 
+					if (_board[i][j - 2] == RED && j <= 4) 
 					{
-						if (j > 5)
-							continue;
-						else
-							value += 1;
-
+						value += 1;
 						if (_board[i][j - 3] == RED)
-							value += 100;
+							value += 50;
+						
 					}
 
 				}
 
 
-
 				//yksi alempana = sama
 				if (_board[i][j] == BLUE && _board[i][j - 1] == BLUE)
 				{
-					if (_board[i][j - 2] != BLUE && j > 4)
-						continue;
+					if (_board[i][j - 2] != BLUE && j >= 3) {
+			
+					}
+						
 					else
 						value -= 0.5;
 
 					//kaksi alempana sama
-					if (_board[i][j - 2] == BLUE) 
+					if (_board[i][j - 2] == BLUE && j <= 4) 
 					{
-						if (j < 5)
-							continue;
-						else 
-							value -= 1;
+						value -= 1;
 
 						if (_board[i][j - 3] == BLUE)
-							value -= 100;											
-
+							value -= 50;
+						
+														
 					}
 
 
@@ -199,11 +198,132 @@ public:
 	}
 
 
+	double check_threats() 
+	{
+		double value = 0.0;
+		int redOdd = 0;
+		int blueOdd = 0;
+		int blueEven = 0;
+		int mixOdd = 0;
+		int testcount = 0;
+		for (int i = 0; i < 7; i++) {
+			for (int j = 0; j < 6; j++) {
+				if (_board[i][j] != EMPTY)
+					testcount++;
+			
+			}
+		}
+		if (testcount == depth)
+			value = 1000000;
+
+
+		
+		for (int i = 0; i < 7; i++) {
+			for (int j = 0; j < 6; j++) {
+
+					//odds
+					if (_board[i][j] == RED && _board[i + 1][j] == RED && _board[i + 2][j] == RED && _board[i + 3][j] == EMPTY) {
+						if (j % 2 != 0)
+							redOdd++;							
+					}
+					if (_board[i][j] == RED && _board[i][j+1] == RED && _board[i][j+2] == RED && _board[i][j+3] == EMPTY) {
+						if ((j+3) % 2 != 0)
+							redOdd++;
+					}
+
+					if (_board[i][j] == RED && _board[i+1][j + 1] == RED && _board[i+2][j + 2] == RED && _board[i+3][j + 3] == EMPTY) {
+						if ((j + 3) % 2 != 0)
+							redOdd++;
+					}
+
+
+					if (_board[i][j] == BLUE && _board[i + 1][j] == BLUE && _board[i + 2][j] == BLUE && _board[i + 3][j] == EMPTY) {
+						if (j % 2 != 0)
+							blueOdd++;
+					}
+					if (_board[i][j] == BLUE && _board[i][j + 1] == BLUE && _board[i][j + 2] == BLUE && _board[i][j + 3] == EMPTY) {
+						if ((j + 3) % 2 != 0)
+							blueOdd++;
+					}
+					if (_board[i][j] == BLUE && _board[i + 1][j + 1] == BLUE && _board[i + 2][j + 2] == BLUE && _board[i + 3][j + 3] == EMPTY) {
+						if ((j + 3) % 2 != 0)
+							blueOdd++;
+					}
+
+
+
+
+					//mixodds
+					if (_board[i][j] == RED && _board[i + 1][j] == RED && _board[i + 2][j] == RED && _board[i + 3][j] == EMPTY) {
+						if (_board[i][j] == BLUE && _board[i + 1][j] == BLUE && _board[i + 2][j] == BLUE && _board[i + 3][j] == EMPTY)
+							if(j % 2 != 0)
+								mixOdd++;			
+
+					}
+					if (_board[i][j] == RED && _board[i][j + 1] == RED && _board[i][j + 2] == RED && _board[i][j + 3] == EMPTY) {
+						if (_board[i][j] == BLUE && _board[i][j + 1] == BLUE && _board[i][j + 2] == BLUE && _board[i][j + 3] == EMPTY) 
+							if ((j+3) % 2 != 0)
+								mixOdd++;
+					}
+					if (_board[i][j] == RED && _board[i + 1][j + 1] == RED && _board[i + 2][j + 2] == RED && _board[i + 3][j + 3] == EMPTY) {
+						if (_board[i][j] == BLUE && _board[i + 1][j + 1] == BLUE && _board[i + 2][j + 2] == BLUE && _board[i + 3][j + 3] == EMPTY)
+							if ((j+3) % 2 != 0)
+								mixOdd++;
+					}
+					
+				
+				//even
+			
+					if (_board[i][j] == BLUE && _board[i + 1][j] == BLUE && _board[i + 2][j] == BLUE && _board[i + 3][j] == EMPTY) {
+						if (j % 2 == 0)
+							blueEven++;
+					}
+					if (_board[i][j] == BLUE && _board[i][j + 1] == BLUE && _board[i][j + 2] == BLUE && _board[i][j + 3] == EMPTY) {
+						if ((j+3) % 2 == 0)
+							blueEven++;
+					}
+					if (_board[i][j] == BLUE && _board[i + 1][j + 1] == BLUE && _board[i + 2][j + 2] == BLUE && _board[i + 3][j + 3] == EMPTY) {
+						if ((j + 3) % 2 == 0)
+							blueEven++;
+					}
+
+
+
+				
+
+
+	
+
+
+
+			}
+		}
+
+		int odds = redOdd - blueOdd;
+		if (redOdd > 0 && blueEven == 0 && blueOdd == 0) {
+			value = 100;
+		}
+		if (odds > 0 && blueEven == 0)
+			value = 100;
+			
+		else if (blueEven > 0)
+			value = -100;
+
+			
+			
+				
+
+
+
+		return value;
+	}
+
+
 
 	double evaluate()
 	{
 			double value = 0.0;
-			if (_to_move == BLUE) {
+			/*if (_to_move == BLUE) {
 				value -= check_horizontals(BLUE);
 				value -= check_verticals(BLUE);
 				value -= check_diagonals(BLUE);
@@ -215,10 +335,10 @@ public:
 				value += check_verticals(RED);
 				value += check_diagonals(RED);
 
-			}
+			}*/
 		
 
-
+			value = check_threats();
 	
 	
 
@@ -253,6 +373,13 @@ public:
 			make_move(movelist[i]);
 			retval = minimax(this, depth - 1);
 			undo_move(movelist[i]);
+			if (retval._minmax == 1000000)
+			{
+				best_value._minmax = retval._minmax;
+				best_value._move = 3;
+				return best_value;
+
+			}
 
 			if (_to_move == RED && retval._minmax >= best_value._minmax)
 			{
