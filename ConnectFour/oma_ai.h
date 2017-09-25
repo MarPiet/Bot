@@ -209,6 +209,13 @@ public:
 		int mixEven = 0;
 		int testcount = 0;
 
+		int redThreats[7][6];
+		int blueThreats[7][6];
+
+		int oddThreat = 1;
+		int evenThreat = 2;
+
+
 		for (int i = 0; i < 7; i++) {
 			for (int j = 0; j < 6; j++) {
 				if (_board[i][j] != EMPTY)
@@ -219,109 +226,343 @@ public:
 		if (testcount == depth)
 			value = 1000000;
 
-
 		
 		for (int i = 0; i < COLUMNS; i++) {
 			for (int j = 0; j < ROWS; j++) {
 
 					//horizontal
-					if (_board[i][j] == RED && _board[i + 1][j] == RED && _board[i + 2][j] == RED && _board[i + 3][j] == EMPTY) {
-						if (j % 2 != 0)
-							redOdd++;	
+					if (_board[i][j] == RED && _board[i + 1][j] == RED && _board[i + 2][j] == RED && _board[i + 3][j] == EMPTY) 
+					{
+						if (j % 2 != 0) {
+							for(int k = 0; k < j; k++)
+								if (blueThreats[i][k] != 2) {
+									if (k == j - 1) {
+										redOdd++;
+										redThreats[i + 3][j] = 1;
+									}							
+								}
+																
+						}							
 						if (j % 2 == 0)
-							redEven++;
+							for (int k = 0; k < j; k++)
+								if (blueThreats[i][k] != 1) {
+									if (k == j - 1) {
+										redEven++;
+										redThreats[i + 3][j] = 2;
+									}
+								
+								}
+										
 					}
+
 					//horizontal
-					if (_board[i][j] == RED && _board[i + 1][j] == RED && _board[i + 2][j] == RED && _board[i - 1][j] == EMPTY) {
-						if (j % 2 != 0)
-							redOdd++;
+					if (_board[i][j] == RED && _board[i + 1][j] == RED && _board[i + 2][j] == RED && _board[i - 1][j] == EMPTY) 
+					{
+						if (j % 2 != 0) {
+							for (int k = 0; k < j; k++)
+								if (blueThreats[i][k] != 2) {
+									if (k == j - 1) {
+										redOdd++;
+										redThreats[i - 1][j] = 1;
+									}
+								}
+
+						}
 						if (j % 2 == 0)
-							redEven++;
+							for (int k = 0; k < j; k++)
+								if (blueThreats[i][k] != 1) {
+									if (k == j - 1) {
+										redEven++;
+										redThreats[i - 1][j] = 2;
+									}
+
+								}
 					}
+
 					//vertical
-					if (_board[i][j] == RED && _board[i][j+1] == RED && _board[i][j+2] == RED && _board[i][j + 3] == EMPTY) {
-						if ((j+3) % 2 != 0)
+					if (_board[i][j] == RED && _board[i][j+1] == RED && _board[i][j+2] == RED && _board[i][j + 3] == EMPTY) 
+					{
+						if ((j + 3) % 2 != 0) {
+							redThreats[i][j + 3] = 1;
 							redOdd++;
-						if ((j + 3) % 2 == 0)
+						}
+
+						if ((j + 3) % 2 == 0) {
+							redThreats[i][j + 3] = 2;
 							redEven++;
+						}
 					}
+
 					//diagonal upwards
-					if (_board[i][j] == RED && _board[i+1][j + 1] == RED && _board[i+2][j + 2] == RED && _board[i + 3][j + 3] == EMPTY) {
+					if (_board[i][j] == RED && _board[i+1][j + 1] == RED && _board[i+2][j + 2] == RED && _board[i + 3][j + 3] == EMPTY)
+					{
 						if ((j + 3) % 2 != 0)
-							redOdd++;
+							for (int k = 0; k < j + 3; k++) 
+								if (blueThreats[i + 3][k] != 2) 
+								{
+									if (k == j + 2) {
+										redOdd++;
+										redThreats[i + 3][j + 3] = 1;
+									}
+										
+									
+								}
+							
+						
 						if ((j + 3) % 2 == 0)
-							redEven++;
+							for (int k = 0; k < j + 3; k++)
+								if (blueThreats[i + 3][k] != 1) 
+								{
+									if (k == j + 2) {
+										redEven++;
+										redThreats[i + 3][j + 3] = 2;
+									}
+
+
+								}
 					}
+
 					//diagonal upwards
 					if (_board[i][j] == RED && _board[i + 1][j + 1] == RED && _board[i + 2][j + 2] == RED && _board[i - 1][j - 1] == EMPTY) {
 						if ((j - 1) % 2 != 0)
-							redOdd++;
+							for (int k = 0; k < j - 1; k++)
+								if (blueThreats[i - 1][k] != 2)
+								{
+									if (k == j - 2) {
+										redOdd++;
+										redThreats[i - 1][j - 1] = 1;
+									}
+
+
+								}
 						if ((j - 1) % 2 == 0)
-							redEven++;
+							for (int k = 0; k < j - 1; k++)
+								if (blueThreats[i - 1][k] != 1)
+								{
+									if (k == j - 2) {
+										redEven++;
+										redThreats[i - 1][j - 1] = 2;
+									}
+
+
+								}
 					}
+
+
 					//diagonal downwards
 					if (_board[i][j] == RED && _board[i + 1][j - 1] == RED && _board[i + 2][j - 2] == RED && _board[i + 3][j - 3] == EMPTY) {
 						if ((j - 3) % 2 != 0)
-							redOdd++;
+							for (int k = 0; k < j - 3; k++)
+								if (blueThreats[i + 3][k] != 2)
+								{
+									if (k == j - 4) {
+										redOdd++;
+										redThreats[i + 3][j - 3] = 1;
+									}
+
+
+								}
 						if ((j - 3) % 2 == 0)
-							redEven++;
+							for (int k = 0; k < j - 3; k++)
+								if (blueThreats[i + 3][k] != 1)
+								{
+									if (k == j - 4) {
+										redEven++;
+										redThreats[i + 3][j - 3] = 2;
+									}
+
+
+								}
 					}
+
 					//diagonal downwards
 					if (_board[i][j] == RED && _board[i + 1][j - 1] == RED && _board[i + 2][j - 2] == RED && _board[i - 1][j + 1] == EMPTY) {
 						if ((j + 1) % 2 != 0)
-							redOdd++;
+							for (int k = 0; k < j + 1; k++)
+								if (blueThreats[i - 1][k] != 2)
+								{
+									if (k == j) {
+										redOdd++;
+										redThreats[i - 1][j + 1] = 1;
+									}
+
+
+								}
+
+
 						if ((j + 1) % 2 == 0)
-							redEven++;
+							for (int k = 0; k < j + 1; k++)
+								if (blueThreats[i - 1][k] != 1)
+								{
+									if (k == j) {
+										redEven++;
+										redThreats[i - 1][j + 1] = 2;
+									}
+
+
+								}
 					}
 
 					//horizontal
 					if (_board[i][j] == BLUE && _board[i + 1][j] == BLUE && _board[i + 2][j] == BLUE && _board[i + 3][j] == EMPTY) {
-						if (j % 2 != 0)
-							blueOdd++;
+						if (j % 2 != 0) {
+							for (int k = 0; k < j; k++)
+								if (redThreats[i][k] != 2) {
+									if (k == j - 1) {
+										blueOdd++;
+										blueThreats[i + 3][j] = 1;
+									}
+								}
+
+						}
 						if (j % 2 == 0)
-							blueEven++;
+							for (int k = 0; k < j; k++)
+								if (redThreats[i][k] != 1) {
+									if (k == j - 1) {
+										blueEven++;
+										blueThreats[i + 3][j] = 2;
+									}
+
+								}
 					}
+
 					//horizontal
 					if (_board[i][j] == BLUE && _board[i + 1][j] == BLUE && _board[i + 2][j] == BLUE && _board[i - 1][j] == EMPTY) {
-						if (j % 2 != 0)
-							blueOdd++;
+						if (j % 2 != 0) {
+							for (int k = 0; k < j; k++)
+								if (redThreats[i][k] != 2) {
+									if (k == j - 1) {
+										blueOdd++;
+										blueThreats[i - 1][j] = 1;
+									}
+								}
+
+						}
 						if (j % 2 == 0)
-							blueEven++;
+							for (int k = 0; k < j; k++)
+								if (redThreats[i][k] != 1) {
+									if (k == j - 1) {
+										blueEven++;
+										blueThreats[i - 1][j] = 2;
+									}
+
+								}
 					}
 					//vertical
 					if (_board[i][j] == BLUE && _board[i][j + 1] == BLUE && _board[i][j + 2] == BLUE && _board[i][j + 3] == EMPTY) {
-						if ((j + 3) % 2 != 0)
+						if ((j + 3) % 2 != 0) {
+							blueThreats[i][j + 3] = 1;
 							blueOdd++;
-						if ((j+3) % 2 == 0)
+						}
+						
+						if ((j + 3) % 2 == 0) {
+							blueThreats[i][j + 3] = 2;
 							blueEven++;
+						}
 					}
 					//diagonal upwards
 					if (_board[i][j] == BLUE && _board[i + 1][j + 1] == BLUE && _board[i + 2][j + 2] == BLUE && _board[i + 3][j + 3] == EMPTY) {
 						if ((j + 3) % 2 != 0)
-							blueOdd++;
+							for (int k = 0; k < j + 3; k++)
+								if (redThreats[i + 3][k] != 2)
+								{
+									if (k == j + 2) {
+										blueOdd++;
+										blueThreats[i + 3][j + 3] = 1;
+									}
+
+
+								}
+
+
 						if ((j + 3) % 2 == 0)
-							blueEven++;
+							for (int k = 0; k < j + 3; k++)
+								if (redThreats[i + 3][k] != 1)
+								{
+									if (k == j + 2) {
+										blueEven++;
+										blueThreats[i + 3][j + 3] = 2;
+									}
+
+
+								}
 					}
 					//diagonal upwards
 					if (_board[i][j] == BLUE && _board[i + 1][j + 1] == BLUE && _board[i + 2][j + 2] == BLUE && _board[i - 1][j - 1] == EMPTY) {
 						if ((j - 1) % 2 != 0)
-							blueOdd++;
+							for (int k = 0; k < j - 1; k++)
+								if (redThreats[i - 1][k] != 2)
+								{
+									if (k == j - 2) {
+										blueOdd++;
+										blueThreats[i - 1][j - 1] = 1;
+									}
+
+
+								}
 						if ((j - 1) % 2 == 0)
-							blueEven++;
+							for (int k = 0; k < j - 1; k++)
+								if (redThreats[i - 1][k] != 1)
+								{
+									if (k == j - 2) {
+										blueEven++;
+										blueThreats[i - 1][j - 1] = 2;
+									}
+
+
+								}
 					}
 					//diagonal downwards
 					if (_board[i][j] == BLUE && _board[i + 1][j - 1] == BLUE && _board[i + 2][j - 2] == BLUE && _board[i + 3][j - 3] == EMPTY) {
 						if ((j - 3) % 2 != 0)
-							blueOdd++;
+							for (int k = 0; k < j - 3; k++)
+								if (redThreats[i + 3][k] != 2)
+								{
+									if (k == j - 4) {
+										blueOdd++;
+										blueThreats[i + 3][j - 3] = 1;
+									}
+
+
+								}
 						if ((j - 3) % 2 == 0)
-							blueEven++;
+							for (int k = 0; k < j - 3; k++)
+								if (redThreats[i + 3][k] != 1)
+								{
+									if (k == j - 4) {
+										blueEven++;
+										blueThreats[i + 3][j - 3] = 2;
+									}
+
+
+								}
 					}
 					//diagonal downwards
 					if (_board[i][j] == BLUE && _board[i + 1][j - 1] == BLUE && _board[i + 2][j - 2] == BLUE && _board[i - 1][j + 1] == EMPTY) {
 						if ((j + 1) % 2 != 0)
-							blueOdd++;
+							for (int k = 0; k < j + 1; k++)
+								if (redThreats[i - 1][k] != 2)
+								{
+									if (k == j) {
+										blueOdd++;
+										blueThreats[i - 1][j + 1] = 1;
+									}
+
+
+								}
+
+
 						if ((j + 1) % 2 == 0)
-							blueEven++;
+							for (int k = 0; k < j + 1; k++)
+								if (redThreats[i - 1][k] != 1)
+								{
+									if (k == j) {
+										blueEven++;
+										blueThreats[i - 1][j + 1] = 2;
+									}
+
+
+								}
 					}
 
 
@@ -385,29 +626,13 @@ public:
 		int odds = redOdd - blueOdd;
 		int evens = redEven - blueEven;
 
-	/*	if (evens > 0) 
-			value += 100;
-
-		if (evens == 0) {
-			if (mixEven > 0)
-				value += 100;
-			else if (mixOdd > 0) {
-				value -= 100;
-			}
-			if (mixEven == 0 && mixOdd == 0) {
-				if (blueOdd > 0)
-					value -= 100;
-			}
-		}
-		if (evens < 0)
-			value -= 100;*/
 
 		if (redEven > blueEven)
-			value += 1000;
+			value += 100;
 		if (redOdd > blueOdd)
 			value += 100;
 		if (blueOdd > redOdd)
-			value -= 1000;
+			value -= 100;
 		if (blueEven > redEven)
 			value -= 100;
 
